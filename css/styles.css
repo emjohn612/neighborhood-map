@@ -1,0 +1,14 @@
+#map {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+}
+.hamburgerNav {
+    width: 35px;
+    height: 5px;
+    background-color: black;
+    margin: 6px 0;
+}
+.menu {
+  position:
+}
