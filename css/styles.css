@@ -3,14 +3,9 @@
 	width: 100%;
 	position: absolute;
 }
-.hamburgerNav {
-    width: 35px;
-    height: 5px;
-    background-color: black;
-    margin: 6px 0;
-}
-.menu {
-  position:
+#pano {
+  width: 200px;
+  height: 200px;
 }
 .dropbtn {
     padding: 16px;
@@ -21,6 +16,7 @@
 .dropdown {
     position: relative;
     display: inline-block;
+
 }
 
 .dropdown-content {
@@ -51,4 +47,7 @@
 
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
+}
+.searchBox {
+  padding-top: 20px;
 }

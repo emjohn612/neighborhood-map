@@ -7,12 +7,12 @@ var locations = [
 },
 {
     name : 'Waterstone Pizza',
-    location: {lat: 37.4118, lng: -79.1372},
+    location: {lat: 37.411768, lng: -79.137258},
     type: 'Restaurant'
 },
 {
     name : 'Neighbors Place',
-    location: {lat: 37.3627, lng: -79.2448},
+    location: {lat: 37.362684, lng: -79.244718},
     type: 'Restaurant'
 },
 {
@@ -22,12 +22,12 @@ var locations = [
 },
 {
     name : 'Yamazatos',
-    location: {lat: 37.335284, lng: -79.244322},
+    location: {lat: 37.335041, lng: -79.244265},
     type: 'Restaurant'
 }
 ];
 
-var place = function(data){
+var Location = function(data){
   this.name = data.name;
   this.location = data.location;
   this.type = data.type;
@@ -41,16 +41,39 @@ var ViewModel = function() {
   this.placeList = ko.observableArray([]);
 
   locations.forEach(function(placeItem){
-      self.placeList.push( new place(placeItem) );
+      self.placeList.push( new Location(placeItem) );
   })
 
   self.openInfoWindow = function(location) {
     google.maps.event.trigger(location.marker, 'click');
   };
+
+  this.typedQuery = ko.observable();
+
+  filteredLocations = ko.computed(function() {
+       self.placeList().forEach(function(location) {
+           if (self.typedQuery() != null) {
+
+               // Filter available locations
+               var match = location.name.toLowerCase().indexOf(self.typedQuery().toLowerCase()) != -1;
+               location.showPlace(match);
+               console.log(match);
+
+               // Filter out map markers
+               location.marker.setVisible(match);
+           }
+       });
+   });
 };
 
-ko.applyBindings(new ViewModel());
+function googleError() {
+    alert('Error loading Google Maps, please try again later.');
+}
 
+viewmodel = new ViewModel();
+ko.applyBindings(viewmodel);
+
+// Start Google Maps API
 
 var map;
 // Create a new blank array for all the listing markers.
@@ -87,6 +110,10 @@ function initMap() {
     // Push the marker to our array of markers.
     markers.push(marker);
 
+    location.marker = marker;
+
+    viewmodel.placeList()[i].marker = marker;
+
     marker.addListener('click', function() {
            // console.log(this.location_name, 'clicked');
            populateInfoWindow(this, largeInfowindow);
@@ -102,7 +129,7 @@ function populateInfoWindow(marker, infowindow) {
     infowindow.marker = marker;
     // Make sure the marker property is cleared if the infowindow is closed.
     infowindow.addListener('closeclick', function() {
-    infowindow.marker = null;
+      infowindow.marker = null;
     });
     var streetViewService = new google.maps.StreetViewService();
     var radius = 50;
@@ -113,19 +140,19 @@ function populateInfoWindow(marker, infowindow) {
       if (status == google.maps.StreetViewStatus.OK) {
         var nearStreetViewLocation = data.location.latLng;
         var heading = google.maps.geometry.spherical.computeHeading(
-        nearStreetViewLocation, marker.position);
-        infowindow.setContent('<div>' + marker.name + '</div><div id="pano"></div>');
-        var panoramaOptions = {
+          nearStreetViewLocation, marker.position);
+          infowindow.setContent('<div class="marker-name">' + marker.name + '</div><div id="pano"></div>');
+          var panoramaOptions = {
             position: nearStreetViewLocation,
             pov: {
               heading: heading,
-              pitch: 30
+              pitch: 20
             }
-        };
+          };
         var panorama = new google.maps.StreetViewPanorama(
-        document.getElementById('pano'), panoramaOptions);
+          document.getElementById('pano'), panoramaOptions);
       } else {
-          infowindow.setContent('<div>' + marker.name+ '</div>' +
+          infowindow.setContent('<div class="marker-name">' + marker.name + '</div>' +
           '<div>No Street View Found</div>')
         }
     }
@@ -146,3 +173,5 @@ function showListings() {
   }
   map.fitBounds(bounds);
 }
+
+// End Google Maps API

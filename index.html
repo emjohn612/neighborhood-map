@@ -11,12 +11,17 @@
 
 <body>
   <div class="container-fluid">
-    <header>
-      <div class="dropdown">
+    <header class="row">
+      <div class="col-md-6 text-left dropdown">
         <img src="img/menu.png" width="70px" class="dropbtn">
         <div class="dropdown-content" data-bind="foreach: locations">
           <div class="places" data-bind="text: name"></div>
         </div>
+      </div>
+      <div class="col-md-6 text-right searchBox">
+        <span class="text">Search</span>
+        <input id="places-search" type="text" placeholder="Pizza" data-bind="textInput: typedQuery">
+        <input id="go-places" type="button" value="Go">
       </div>
     </header>
     <div class="row">
