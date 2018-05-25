@@ -120,18 +120,17 @@ var ViewModel = function() {
        self.placeList().forEach(function(location) {
            if (self.placeSearched() != null) {
 
-               // Filter available locations
                var match = location.name.toLowerCase().indexOf(self.placeSearched().toLowerCase()) != -1;
                location.showPlace(match);
                console.log(match);
 
-               // Filter out map markers
                location.marker.setVisible(match);
            };
        });
    });
 
   this.openWindow = function(){
+    console.log(this.name)
     var marker = this.marker;
     google.maps.event.trigger(marker, 'click');
   };

@@ -57,8 +57,8 @@ body {
   cursor: pointer;
   color: white;
 }
-#map{
-    transition: margin-left .5s;
+#map {
+  transition: margin-left .5s;
 }
 .topNav {
   position: sticky;
