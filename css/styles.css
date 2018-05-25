@@ -7,47 +7,75 @@
   width: 200px;
   height: 200px;
 }
-.dropbtn {
-    padding: 16px;
-    border: none;
-    cursor: pointer;
+html {
+  background-color: black;
 }
-
-.dropdown {
-    position: relative;
-    display: inline-block;
-
+.container{
+  width: 100%;
+  height: 100%;
+  background-color: black;
 }
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #ffffff;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+body {
+    font-family: "Lato", sans-serif;
+    transition: background-color .5s;
+}
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
     z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
 }
 
-.dropdown-content div {
-    color: black;
-    text-align: center;
-    padding: 20px 50px;
+.sidenav a {
+    padding: 8px 8px 8px 32px;
     text-decoration: none;
+    font-size: 15px;
+    color: #818181;
     display: block;
+    transition: 0.3s;
 }
 
-.dropdown-content div:hover {
-  background-color: #dbdbdb;
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 30px;
+    margin-left: 50px;
+}
+.menuIcon {
+  font-size: 30px;
   cursor: pointer;
+  color: white;
 }
-
-.dropdown:hover .dropdown-content {
-    display: block;
+#map{
+    transition: margin-left .5s;
 }
-
-.dropdown:hover .dropbtn {
-    background-color: #3e8e41;
+.topNav {
+  position: sticky;
+  padding-bottom: 10px;
 }
 .searchBox {
-  padding-top: 20px;
+  float: right;
+  padding-top: 13px;
+}
+h3 {
+  color: white;
+  text-align: center;
+}
+.text {
+  color: white;
+}
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
 }

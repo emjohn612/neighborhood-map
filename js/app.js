@@ -1,4 +1,3 @@
-// My locations that will be shown to the user.
 var locations = [
 {
     name: 'El Jefe',
@@ -21,8 +20,68 @@ var locations = [
     type: 'Bar'
 },
 {
-    name : 'Yamazatos',
+    name : 'Yamazato',
     location: {lat: 37.335041, lng: -79.244265},
+    type: 'Restaurant'
+},
+{
+    name: 'Blackwater Creek Trail',
+    location: {lat: 37.416690, lng: -79.141263},
+    type: 'Trail'
+},
+{
+    name: 'White Hart Cafe',
+    location: {lat: 37.412303, lng: -79.139706},
+    type: 'Cafe'
+},
+{
+    name: '{RA} Bistro',
+    location: {lat: 37.410477, lng: -79.138148},
+    type: 'Restaurant'
+},
+{
+    name: 'Peaks View Park',
+    location: {lat: 37.420004, lng: -79.226103},
+    type: 'Park'
+},
+{
+    name: 'Appomattox Court House',
+    location: {lat: 37.377520, lng: -78.796007},
+    type: 'Landmark'
+},
+{
+    name: 'Thomas Jefferson\'s Poplar Forest',
+    location: {lat: 37.347907, lng: -79.264540},
+    type: 'Landmark'
+},
+{
+    name: 'Natural Bridge State Park',
+    location: {lat: 37.628620, lng: -79.543535},
+    type: 'Park'
+},
+{
+    name: 'Shakers',
+    location: {lat: 37.367122, lng: -79.175420},
+    type: 'Restaurant'
+},
+{
+    name: 'Perky\'s',
+    location: {lat: 37.147667, lng: -79.230994},
+    type: 'Restaurant'
+},
+{
+    name: 'Rivermont Pizza',
+    location: {lat: 37.435186, lng: -79.171021},
+    type: 'Restaurant'
+},
+{
+    name: 'Peaks of Otter',
+    location: {lat: 37.445630, lng: -79.609981},
+    type: 'Park'
+},
+{
+    name: 'Texas Inn',
+    location: {lat: 37.418401, lng: -79.145141},
     type: 'Restaurant'
 }
 ];
@@ -44,26 +103,38 @@ var ViewModel = function() {
       self.placeList.push( new Location(placeItem) );
   })
 
-  self.openInfoWindow = function(location) {
-    google.maps.event.trigger(location.marker, 'click');
-  };
+  this.openNav = function() {
+      document.getElementById("mySidenav").style.width = "250px";
+      document.getElementById("map").style.marginLeft = "250px";
+      document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+  }
+  this.closeNav = function() {
+      document.getElementById("mySidenav").style.width = "0";
+      document.getElementById("map").style.marginLeft= "0";
+      document.body.style.backgroundColor = "white";
+  }
 
-  this.typedQuery = ko.observable();
+  this.placeSearched = ko.observable();
 
-  filteredLocations = ko.computed(function() {
+  filterLocations = ko.computed(function() {
        self.placeList().forEach(function(location) {
-           if (self.typedQuery() != null) {
+           if (self.placeSearched() != null) {
 
                // Filter available locations
-               var match = location.name.toLowerCase().indexOf(self.typedQuery().toLowerCase()) != -1;
+               var match = location.name.toLowerCase().indexOf(self.placeSearched().toLowerCase()) != -1;
                location.showPlace(match);
                console.log(match);
 
                // Filter out map markers
                location.marker.setVisible(match);
-           }
+           };
        });
    });
+
+  this.openWindow = function(){
+    var marker = this.marker;
+    google.maps.event.trigger(marker, 'click');
+  };
 };
 
 function googleError() {
@@ -73,18 +144,154 @@ function googleError() {
 viewmodel = new ViewModel();
 ko.applyBindings(viewmodel);
 
-// Start Google Maps API
-
 var map;
 // Create a new blank array for all the listing markers.
 var markers = [];
 
 function initMap() {
+  var styles = [
+    {
+        "featureType": "all",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#ffffff"
+            }
+        ]
+    },
+    {
+        "featureType": "all",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "color": "#000000"
+            },
+            {
+                "lightness": 13
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#144b53"
+            },
+            {
+                "lightness": 14
+            },
+            {
+                "weight": 1.4
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "elementType": "all",
+        "stylers": [
+            {
+                "color": "#08304b"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#0c4152"
+            },
+            {
+                "lightness": 5
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#0b434f"
+            },
+            {
+                "lightness": 25
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#000000"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#0b3d51"
+            },
+            {
+                "lightness": 16
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#000000"
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "elementType": "all",
+        "stylers": [
+            {
+                "color": "#146474"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "all",
+        "stylers": [
+            {
+                "color": "#021019"
+            }
+        ]
+    }
+]
   // Constructor creates a new map - only center and zoom are required.
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 37.4138, lng: -79.1422},
     zoom: 13,
-    mapTypeControl: false
+    mapTypeControl: false,
+    styles: styles
   });
 
   var largeInfowindow = new google.maps.InfoWindow({
@@ -107,11 +314,11 @@ function initMap() {
       id: i,
       map: map
     });
+
     // Push the marker to our array of markers.
     markers.push(marker);
 
     location.marker = marker;
-
     viewmodel.placeList()[i].marker = marker;
 
     marker.addListener('click', function() {
