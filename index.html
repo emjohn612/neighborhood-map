@@ -17,7 +17,7 @@
   </div>
   <a href="javascript:void(0)" class="closebtn" data-bind="click: closeNav">&times; </a>
   <div data-bind="foreach: locationsToShow">
-    <a href="#" data-bind="text: name, click: $parent.openWindow"></a>
+    <a href="#" data-bind="text: name, visible:showPlace, click: $parent.openWindow"></a>
   </div>
 </div>
 <div class="topNav">
