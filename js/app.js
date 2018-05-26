@@ -12,7 +12,7 @@ var locations = [
 {
     name : 'Beer 88',
     location: {lat: 37.3559, lng: -79.2396},
-    type: 'Bar'
+    type: 'Restaurant'
 },
 {
     name : 'Yamazato',
@@ -22,12 +22,12 @@ var locations = [
 {
     name: 'Blackwater Creek Trail',
     location: {lat: 37.416690, lng: -79.141263},
-    type: 'Trail'
+    type: 'Landmark'
 },
 {
     name: 'White Hart Cafe',
     location: {lat: 37.412303, lng: -79.139706},
-    type: 'Cafe'
+    type: 'Restaurant'
 },
 {
     name: '{RA} Bistro',
@@ -129,6 +129,15 @@ var ViewModel = function() {
     var marker = markers.filter(m => m.name === location.name)[0];
     if(marker){
         google.maps.event.trigger(marker, 'click');
+        toggleBounce(marker);
+    }
+
+    function toggleBounce() {
+      if (marker.getAnimation() !== null) {
+        marker.setAnimation(null);
+      } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+      }
     }
   };
 
@@ -144,6 +153,7 @@ var ViewModel = function() {
       }else {
         return ko.utils.arrayFilter(this.placeList(), function(place) {
           console.log(place.type);
+          //place.showPlace(desiredType);
           return place.type === desiredType;
         });
       };
@@ -359,8 +369,15 @@ function initMap() {
     marker.addListener('click', function() {
            // console.log(this.location_name, 'clicked');
            populateInfoWindow(this, largeInfowindow);
+           toggleBounce(this);
        });
   }
+  function toggleBounce(marker) {
+  marker.setAnimation(google.maps.Animation.BOUNCE);
+  setTimeout(function() {
+    marker.setAnimation(null)
+  }, 1500);
+}
 };
 
 function populateInfoWindow(marker, infowindow) {
