@@ -117,7 +117,7 @@ var ViewModel = function() {
 
                var match = location.name.toLowerCase().indexOf(self.placeSearched().toLowerCase()) != -1;
                location.showPlace(match);
-               console.log(match);
+               //console.log(match);
 
                location.marker.setVisible(match);
            };
@@ -125,19 +125,10 @@ var ViewModel = function() {
    });
 
   this.openWindow = function(location){
-    console.log(location.name)
+    //console.log(location.name)
     var marker = markers.filter(m => m.name === location.name)[0];
     if(marker){
         google.maps.event.trigger(marker, 'click');
-        toggleBounce(marker);
-    }
-
-    function toggleBounce() {
-      if (marker.getAnimation() !== null) {
-        marker.setAnimation(null);
-      } else {
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-      }
     }
   };
 
@@ -159,28 +150,12 @@ var ViewModel = function() {
       };
     }, this);
 
-  //this.showLocationElement = function(elem) { if (elem.nodeType === 1) $(elem).hide().slideDown() }
-  //this.hideLocationElement = function(elem) { if (elem.nodeType === 1) $(elem).slideUp(function() { $(elem).remove();})}
-
   function googleError() {
       alert('Error loading Google Maps, please try again later.');
   };
 
 };
 
-
-/*ko.bindingHandlers.fadeVisible = {
-    init: function(element, valueAccessor) {
-        // Initially set the element to be instantly visible/hidden depending on the value
-        var value = valueAccessor();
-        $(element).toggle(ko.utils.unwrapObservable(value)); // Use "unwrapObservable" so we can handle values that may or may not be observable
-    },
-    update: function(element, valueAccessor) {
-        // Whenever the value subsequently changes, slowly fade the element in or out
-        var value = valueAccessor();
-        ko.utils.unwrapObservable(value) ? $(element).fadeIn() : $(element).fadeOut();
-    }
-};*/
 viewmodel = new ViewModel();
 ko.applyBindings(viewmodel);
 
@@ -356,6 +331,10 @@ function initMap() {
       name: name,
       type: type,
       animation: google.maps.Animation.DROP,
+      icon: {
+			     url: "img/icon.png",
+			     scaledSize: new google.maps.Size(30, 30)
+		  },
       id: i,
       map: map
     });
@@ -434,7 +413,6 @@ function getPhoto(id, model, locAddress) {
   });
   infowindow.open(map, marker);
 };
-
 /*
 // Check to make sure the infowindow is not already opened on this marker.
   if (infowindow.marker != marker) {
