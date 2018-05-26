@@ -93,6 +93,14 @@ figure {
   margin-left: 10px;
   margin-right: 0;
 }
+label {
+  color: white;
+  font-size: 10px;
+}
+.filter {
+  text-align: center;
+  padding-bottom: 10px;
+}
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}

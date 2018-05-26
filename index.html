@@ -8,8 +8,14 @@
 <div class="container">
 <div id="mySidenav" class="sidenav">
   <span><h3>Local Hot Spots</h3></span>
+  <div class="filter">
+    <label><input type='radio' name="type" value='all' data-bind='checked: typeToShow'>All</label>
+    <label><input type='radio' name="type" value='restaurant' data-bind='checked: typeToShow'>Restaurant</label>
+    <label><input type='radio' name="type" value='park' data-bind='checked: typeToShow'>Park</label>
+    <label><input type='radio' name="type" value='landmark' data-bind='checked: typeToShow'>Landmark</label>
+  </div>
   <a href="javascript:void(0)" class="closebtn" data-bind="click: closeNav">&times; </a>
-  <div data-bind="foreach: locations">
+  <div data-bind="foreach: locationsToShow">
     <a href="#" data-bind="text: name, click: $parent.openWindow"></a>
   </div>
 </div>
@@ -17,7 +23,7 @@
   <span class="menuIcon" data-bind="click: openNav">&#9776;</span>
   <span class="text-right searchBox">
     <span class="text">Search: </span>
-    <input id="places-search" type="text" placeholder="Example: Pizza" data-bind="textInput: placeSearched">
+    <input id="places-search" type="text" placeholder="Ex: Pizza" data-bind="textInput: placeSearched">
   </span>
 </div>
   <div class="container">

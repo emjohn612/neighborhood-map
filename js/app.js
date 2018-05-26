@@ -124,17 +124,53 @@ var ViewModel = function() {
        });
    });
 
-  this.openWindow = function(){
-    console.log(this.name)
-    var marker = this.marker;
-    google.maps.event.trigger(marker, 'click');
+  this.openWindow = function(location){
+    console.log(location.name)
+    var marker = markers.filter(m => m.name === location.name)[0];
+    if(marker){
+        google.maps.event.trigger(marker, 'click');
+    }
   };
+
+    this.typeToShow = ko.observable("all");
+    this.locationsToShow = ko.computed(function() {
+    // Represents a filtered list of planets
+    // i.e., only those matching the "typeToShow" condition
+
+      var desiredType = this.typeToShow();
+      //console.log(desiredType);
+      if (desiredType == "all"){
+        return this.placeList();
+      }else {
+        return ko.utils.arrayFilter(this.placeList(), function(place) {
+          console.log(place.type);
+          return place.type === desiredType;
+        });
+      };
+    }, this);
+
+  //this.showLocationElement = function(elem) { if (elem.nodeType === 1) $(elem).hide().slideDown() }
+  //this.hideLocationElement = function(elem) { if (elem.nodeType === 1) $(elem).slideUp(function() { $(elem).remove();})}
+
+  function googleError() {
+      alert('Error loading Google Maps, please try again later.');
+  };
+
 };
 
-function googleError() {
-    alert('Error loading Google Maps, please try again later.');
-}
 
+/*ko.bindingHandlers.fadeVisible = {
+    init: function(element, valueAccessor) {
+        // Initially set the element to be instantly visible/hidden depending on the value
+        var value = valueAccessor();
+        $(element).toggle(ko.utils.unwrapObservable(value)); // Use "unwrapObservable" so we can handle values that may or may not be observable
+    },
+    update: function(element, valueAccessor) {
+        // Whenever the value subsequently changes, slowly fade the element in or out
+        var value = valueAccessor();
+        ko.utils.unwrapObservable(value) ? $(element).fadeIn() : $(element).fadeOut();
+    }
+};*/
 viewmodel = new ViewModel();
 ko.applyBindings(viewmodel);
 
@@ -380,7 +416,7 @@ function getPhoto(id, model, locAddress) {
       }
   });
   infowindow.open(map, marker);
-}
+};
 
 /*
 // Check to make sure the infowindow is not already opened on this marker.
