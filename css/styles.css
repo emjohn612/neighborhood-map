@@ -75,6 +75,24 @@ h3 {
 .text {
   color: white;
 }
+.marker-name {
+  font-size: 20px;
+  text-align: center s;
+}
+.infowindow {
+  display: block;
+  text-align: center;
+  background-color: black;
+}
+.foursquareImg {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+figure {
+  margin-left: 10px;
+  margin-right: 0;
+}
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}

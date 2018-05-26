@@ -10,11 +10,6 @@ var locations = [
     type: 'Restaurant'
 },
 {
-    name : 'Neighbors Place',
-    location: {lat: 37.362684, lng: -79.244718},
-    type: 'Restaurant'
-},
-{
     name : 'Beer 88',
     location: {lat: 37.3559, lng: -79.2396},
     type: 'Bar'
@@ -294,7 +289,7 @@ function initMap() {
   });
 
   var largeInfowindow = new google.maps.InfoWindow({
-        maxWidth:350
+        maxWidth:240
     });
 
   window.addEventListener('load', showListings);
@@ -302,11 +297,16 @@ function initMap() {
   for (var i = 0; i < locations.length; i++) {
     // Get the position from the location array.
     var position = locations[i].location;
+    var lat = locations[i].location.lat;
+    var lng = locations[i].location.lng;
     var name = locations[i].name;
     var type = locations[i].type;
+
     // Create a marker per location, and put into markers array.
     var marker = new google.maps.Marker({
       position: position,
+      lat: lat,
+      lng: lng,
       name: name,
       type: type,
       animation: google.maps.Animation.DROP,
@@ -328,6 +328,61 @@ function initMap() {
 };
 
 function populateInfoWindow(marker, infowindow) {
+  infowindow.setContent('');
+  var lat = marker.lat;
+  var lng = marker.lng;
+  console.log(lat);
+  var url = "https://api.foursquare.com/v2/venues/search/?" + $.param({
+    client_id: "JE5ABTNDMETWFRVUS3BGTFYF5LE1CFLEJ4PXFFKCEXJ25YCZ",
+    client_secret: "UFQPWNLOPKBDCNPHNLHD11I3O2Q310WYLKSFH3IXUEJREWTK",
+    v: "20130815",
+    ll: lat + ',' + lng,
+    query: marker.name,
+    limit: "1"
+});
+console.log(url);
+$.ajax(url, {
+      dataType: "jsonp",
+      success: function(data){
+          var id = data.response.venues[0].id;
+          var locName = data.response.venues[0].name;
+          var address = data.response.venues[0].location.formattedAddress[0];
+          //console.log(id, locName);
+          getPhoto(id, marker, address);
+      },
+      error: function(xhr, status, error) {
+          alert("Error: " + status);
+      }
+  });
+
+function getPhoto(id, model, locAddress) {
+  url = "https://api.foursquare.com/v2/venues/" + id + "/photos/?" + $.param({
+            client_id: "JE5ABTNDMETWFRVUS3BGTFYF5LE1CFLEJ4PXFFKCEXJ25YCZ",
+            client_secret: "UFQPWNLOPKBDCNPHNLHD11I3O2Q310WYLKSFH3IXUEJREWTK",
+            v: "20130815",
+            limit: "1"
+        });
+  //console.log(url);
+  console.log(model);
+  $.ajax(url, {
+      dataType: "jsonp",
+      success: function(data){
+          var photos = data.response.photos.items;
+          photos.forEach(function(photo){
+              var pic = photo.prefix + "height500" + photo.suffix;
+              infowindow.setContent('<div class="marker-name">' + marker.name + '</div><div>' + locAddress + '</div><figure class="location-img"><img src="' + pic + '" id="pano"></figure><a href="' + 'http://foursquare.com/v/' + marker.name +'/'+ id + '?ref=JE5ABTNDMETWFRVUS3BGTFYF5LE1CFLEJ4PXFFKCEXJ25YCZ"><img class="foursquareImg" src="img/Powered-by-Foursquare.png">');
+              //addPhoto(pic);
+              console.log(pic);
+          });
+      },
+      error: function(xhr, status, error) {
+          alert("Error: " + status);
+      }
+  });
+  infowindow.open(map, marker);
+}
+
+/*
 // Check to make sure the infowindow is not already opened on this marker.
   if (infowindow.marker != marker) {
     // Clear the infowindow content to give the streetview time to load.
@@ -339,10 +394,11 @@ function populateInfoWindow(marker, infowindow) {
     });
     var streetViewService = new google.maps.StreetViewService();
     var radius = 50;
+
     // In case the status is OK, which means the pano was found, compute the
     //position of the streetview image, then calculate the heading, then get a
     // panorama from that and set the options
-    function getStreetView(data, status) {
+    /*function getStreetView(data, status) {
       if (status == google.maps.StreetViewStatus.OK) {
         var nearStreetViewLocation = data.location.latLng;
         var heading = google.maps.geometry.spherical.computeHeading(
@@ -367,7 +423,7 @@ function populateInfoWindow(marker, infowindow) {
     streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
     // Open the infowindow on the correct marker.
     infowindow.open(map, marker);
-  }
+  }*/
 }
 
 function showListings() {
