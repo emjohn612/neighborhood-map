@@ -4,7 +4,7 @@ var locations = [{
       lat: 37.4126,
       lng: -79.1387
     },
-    type: 'Restaurant'
+    type: 'restaurant'
   },
   {
     name: 'Waterstone Pizza',
@@ -12,7 +12,7 @@ var locations = [{
       lat: 37.411768,
       lng: -79.137258
     },
-    type: 'Restaurant'
+    type: 'restaurant'
   },
   {
     name: 'Beer 88',
@@ -20,7 +20,7 @@ var locations = [{
       lat: 37.3559,
       lng: -79.2396
     },
-    type: 'Restaurant'
+    type: 'restaurant'
   },
   {
     name: 'Yamazato',
@@ -28,7 +28,7 @@ var locations = [{
       lat: 37.335041,
       lng: -79.244265
     },
-    type: 'Restaurant'
+    type: 'restaurant'
   },
   {
     name: 'Blackwater Creek Trail',
@@ -36,7 +36,7 @@ var locations = [{
       lat: 37.416690,
       lng: -79.141263
     },
-    type: 'Landmark'
+    type: 'landmark'
   },
   {
     name: 'White Hart Cafe',
@@ -44,7 +44,7 @@ var locations = [{
       lat: 37.412303,
       lng: -79.139706
     },
-    type: 'Restaurant'
+    type: 'restaurant'
   },
   {
     name: '{RA} Bistro',
@@ -52,7 +52,7 @@ var locations = [{
       lat: 37.410477,
       lng: -79.138148
     },
-    type: 'Restaurant'
+    type: 'restaurant'
   },
   {
     name: 'Peaks View Park',
@@ -60,7 +60,7 @@ var locations = [{
       lat: 37.420004,
       lng: -79.226103
     },
-    type: 'Park'
+    type: 'park'
   },
   {
     name: 'Appomattox Court House',
@@ -68,7 +68,7 @@ var locations = [{
       lat: 37.377520,
       lng: -78.796007
     },
-    type: 'Landmark'
+    type: 'landmark'
   },
   {
     name: 'Thomas Jefferson\'s Poplar Forest',
@@ -76,7 +76,7 @@ var locations = [{
       lat: 37.347907,
       lng: -79.264540
     },
-    type: 'Landmark'
+    type: 'landmark'
   },
   {
     name: 'Natural Bridge State Park',
@@ -84,7 +84,7 @@ var locations = [{
       lat: 37.628620,
       lng: -79.543535
     },
-    type: 'Park'
+    type: 'park'
   },
   {
     name: 'Shakers',
@@ -92,7 +92,7 @@ var locations = [{
       lat: 37.367122,
       lng: -79.175420
     },
-    type: 'Restaurant'
+    type: 'restaurant'
   },
   {
     name: 'Perky\'s',
@@ -100,7 +100,7 @@ var locations = [{
       lat: 37.147667,
       lng: -79.230994
     },
-    type: 'Restaurant'
+    type: 'restaurant'
   },
   {
     name: 'Rivermont Pizza',
@@ -108,7 +108,7 @@ var locations = [{
       lat: 37.435186,
       lng: -79.171021
     },
-    type: 'Restaurant'
+    type: 'restaurant'
   },
   {
     name: 'Peaks of Otter',
@@ -116,7 +116,7 @@ var locations = [{
       lat: 37.445630,
       lng: -79.609981
     },
-    type: 'Park'
+    type: 'park'
   },
   {
     name: 'Texas Inn',
@@ -124,7 +124,7 @@ var locations = [{
       lat: 37.418401,
       lng: -79.145141
     },
-    type: 'Restaurant'
+    type: 'restaurant'
   }
 ];
 
@@ -178,23 +178,21 @@ var ViewModel = function() {
   };
 
   this.typeToShow = ko.observable("all");
-  this.locationsToShow = ko.computed(function() {
-    // Represents a filtered list of planets
-    // i.e., only those matching the "typeToShow" condition
-
+  this.locationsToShow = ko.computed(function(place) {
     var desiredType = this.typeToShow();
     //console.log(desiredType);
     if (desiredType == "all") {
       return this.placeList();
     } else {
       return ko.utils.arrayFilter(this.placeList(), function(place) {
-        console.log(place.type);
-        //place.showPlace(desiredType);
-        location.marker.setVisible(desiredType);
+        //console.log(place.type);
+        var showMarkers = place.type.indexOf(self.typeToShow()) != -1;
+        place.marker.setVisible(showMarkers);
         return place.type === desiredType;
       });
     };
   }, this);
+
 
   function googleError() {
     alert('Error loading Google Maps, please try again later.');
@@ -434,7 +432,7 @@ function populateInfoWindow(marker, infowindow) {
         var photos = data.response.photos.items;
         photos.forEach(function(photo) {
           var pic = photo.prefix + "height500" + photo.suffix;
-          infowindow.setContent('<div class="marker-name">' + marker.name + '</div><div>' + locAddress + '</div><figure class="location-img"><img src="' + pic + '" id="pano"></figure><a href="' + 'http://foursquare.com/v/' + marker.name + '/' + id + '?ref=JE5ABTNDMETWFRVUS3BGTFYF5LE1CFLEJ4PXFFKCEXJ25YCZ"><img class="foursquareImg" src="img/Powered-by-Foursquare.png">');
+          infowindow.setContent('<div class="marker-name">' + marker.name + '</div><div class="address">' + locAddress + '</div><figure class="location-img"><img src="' + pic + '" id="pano"></figure><a href="' + 'http://foursquare.com/v/' + marker.name + '/' + id + '?ref=JE5ABTNDMETWFRVUS3BGTFYF5LE1CFLEJ4PXFFKCEXJ25YCZ"><img class="foursquareImg" src="img/Powered-by-Foursquare.png">');
           //addPhoto(pic);
           //console.log(pic);
         });
