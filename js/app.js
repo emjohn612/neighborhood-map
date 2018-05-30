@@ -1,3 +1,4 @@
+// My Locations
 var locations = [{
     name: 'El Jefe',
     location: {
@@ -136,6 +137,8 @@ var Location = function(data) {
   this.showPlace = ko.observable(true);
 };
 
+// ViewModel Start
+
 var ViewModel = function() {
   var self = this;
 
@@ -182,19 +185,19 @@ var ViewModel = function() {
     var desiredType = this.typeToShow();
     //console.log(desiredType);
     if (desiredType == "all") {
-      this.placeList().forEach(function(place){
-        if(place.marker){
+      this.placeList().forEach(function(place) {
+        if (place.marker) {
           place.marker.setVisible(true);
         };
       });
       return this.placeList();
     } else {
-        return ko.utils.arrayFilter(this.placeList(), function(place) {
+      return ko.utils.arrayFilter(this.placeList(), function(place) {
         //console.log(place.type);
-          var showMarkers = place.type.indexOf(self.typeToShow()) != -1;
-          place.marker.setVisible(showMarkers);
-          return place.type === desiredType;
-        });
+        var showMarkers = place.type.indexOf(self.typeToShow()) != -1;
+        place.marker.setVisible(showMarkers);
+        return place.type === desiredType;
+      });
     };
   }, this);
 
@@ -213,6 +216,9 @@ var map;
 var markers = [];
 
 function initMap() {
+
+  // Map styles
+
   var styles = [{
       "featureType": "all",
       "elementType": "labels.text.fill",
@@ -328,7 +334,7 @@ function initMap() {
       }]
     }
   ]
-  // Constructor creates a new map - only center and zoom are required.
+  // Create Map
   map = new google.maps.Map(document.getElementById('map'), {
     center: {
       lat: 37.4138,
@@ -342,6 +348,8 @@ function initMap() {
   var largeInfowindow = new google.maps.InfoWindow({
     maxWidth: 240
   });
+
+  // On load, render all markers to map
 
   window.addEventListener('load', showLocations);
   // The following group uses the location array to create an array of markers on initialize.
@@ -380,14 +388,16 @@ function initMap() {
       populateInfoWindow(this, largeInfowindow);
       toggleBounce(this);
     });
-  }
+  };
+
+  // Toggle bounce for markers
 
   function toggleBounce(marker) {
     marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function() {
-      marker.setAnimation(null)
+      marker.setAnimation(null);
     }, 1500);
-  }
+  };
 };
 
 // Make ajax request to Foursquare's venue search API
@@ -395,7 +405,6 @@ function populateInfoWindow(marker, infowindow) {
   infowindow.setContent('');
   var lat = marker.lat;
   var lng = marker.lng;
-  //console.log(lat);
   var url = "https://api.foursquare.com/v2/venues/search/?" + $.param({
     client_id: "JE5ABTNDMETWFRVUS3BGTFYF5LE1CFLEJ4PXFFKCEXJ25YCZ",
     client_secret: "UFQPWNLOPKBDCNPHNLHD11I3O2Q310WYLKSFH3IXUEJREWTK",
@@ -404,7 +413,6 @@ function populateInfoWindow(marker, infowindow) {
     query: marker.name,
     limit: "1"
   });
-  //console.log(url);
 
   $.ajax(url, {
     dataType: "jsonp",
@@ -412,7 +420,6 @@ function populateInfoWindow(marker, infowindow) {
       var id = data.response.venues[0].id;
       var locName = data.response.venues[0].name;
       var address = data.response.venues[0].location.formattedAddress[0];
-      //console.log(id, locName);
       getPhoto(id, marker, address);
     },
     // If any errors
@@ -429,17 +436,20 @@ function populateInfoWindow(marker, infowindow) {
       v: "20130815",
       limit: "1"
     });
-    //console.log(url);
-    //console.log(model);
+
     $.ajax(url, {
       dataType: "jsonp",
       success: function(data) {
         var photos = data.response.photos.items;
         photos.forEach(function(photo) {
           var pic = photo.prefix + "height500" + photo.suffix;
-          infowindow.setContent('<div class="marker-name">' + marker.name + '</div><div class="address">' + locAddress + '</div><figure class="location-img"><img src="' + pic + '" id="pano"></figure><a href="' + 'http://foursquare.com/v/' + marker.name + '/' + id + '?ref=JE5ABTNDMETWFRVUS3BGTFYF5LE1CFLEJ4PXFFKCEXJ25YCZ"><img class="foursquareImg" src="img/Powered-by-Foursquare.png">');
-          //addPhoto(pic);
-          //console.log(pic);
+          infowindow.setContent('<div class="marker-name">' + marker.name +
+            '</div><div class="address">' + locAddress +
+            '</div><figure class="location-img"><img src="' + pic +
+            '" id="infobox"></figure><a href="' + 'http://foursquare.com/v/' +
+            marker.name + '/' + id +
+            '?ref=JE5ABTNDMETWFRVUS3BGTFYF5LE1CFLEJ4PXFFKCEXJ25YCZ">' +
+            '<img class="foursquareImg" src="img/Powered-by-Foursquare.png">');
         });
       },
       // If any errors
@@ -450,6 +460,7 @@ function populateInfoWindow(marker, infowindow) {
     infowindow.open(map, marker);
   };
   /*
+  // Google's street view
   // Check to make sure the infowindow is not already opened on this marker.
     if (infowindow.marker != marker) {
       // Clear the infowindow content to give the streetview time to load.
@@ -464,7 +475,7 @@ function populateInfoWindow(marker, infowindow) {
       // In case the status is OK, which means the pano was found, compute the
       //position of the streetview image, then calculate the heading, then get a
       // panorama from that and set the options
-      /*function getStreetView(data, status) {
+      function getStreetView(data, status) {
         if (status == google.maps.StreetViewStatus.OK) {
           var nearStreetViewLocation = data.location.latLng;
           var heading = google.maps.geometry.spherical.computeHeading(
@@ -498,8 +509,8 @@ function showLocations() {
   for (var i = 0; i < markers.length; i++) {
     markers[i].setMap(map);
     bounds.extend(markers[i].position);
-  }
+  };
   map.fitBounds(bounds);
-}
+};
 
 // End Google Maps API
