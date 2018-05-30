@@ -77,18 +77,17 @@ body {
   padding-bottom: 10px;
 }
 
-.searchBox {
-  padding-left: 25px;
-  padding-bottom: 10px;
-  float: right;
-  padding-top: 15px;
-  padding-bottom: 10px;
-  padding-right: 5px;
-}
-
 h3 {
   color: white;
   text-align: center;
+}
+
+.title {
+  float: right;
+  color: white;
+  font-size: 25px;
+  padding-top: 10px;
+  padding-right: 10px;
 }
 
 .text {

@@ -182,14 +182,19 @@ var ViewModel = function() {
     var desiredType = this.typeToShow();
     //console.log(desiredType);
     if (desiredType == "all") {
+      this.placeList().forEach(function(place){
+        if(place.marker){
+          place.marker.setVisible(true);
+        };
+      });
       return this.placeList();
     } else {
-      return ko.utils.arrayFilter(this.placeList(), function(place) {
+        return ko.utils.arrayFilter(this.placeList(), function(place) {
         //console.log(place.type);
-        var showMarkers = place.type.indexOf(self.typeToShow()) != -1;
-        place.marker.setVisible(showMarkers);
-        return place.type === desiredType;
-      });
+          var showMarkers = place.type.indexOf(self.typeToShow()) != -1;
+          place.marker.setVisible(showMarkers);
+          return place.type === desiredType;
+        });
     };
   }, this);
 
@@ -456,7 +461,6 @@ function populateInfoWindow(marker, infowindow) {
       });
       var streetViewService = new google.maps.StreetViewService();
       var radius = 50;
-
       // In case the status is OK, which means the pano was found, compute the
       //position of the streetview image, then calculate the heading, then get a
       // panorama from that and set the options
