@@ -1,16 +1,16 @@
-# Neighborhood Map
+## Neighborhood Map
 
-  Single page web app that show my cities favorite locations
-  Incorporates the Google Maps API along with Foursquare's venue and photo API
-  On marker click, opens up an info-window that displays the address, photo of the location and link to the location's page on Foursquare
+  Single page web app that shows my cities favorite locations.
+  Incorporates the Google Maps API along with Foursquare's venue and photo API.
+  On marker click, opens up an info-window that displays the address, photo of the location and link to the location's page on Foursquare.
 
 ### What is needed
 
-  any web-browser
+  Any web-browser
 
 ### Installing
 
-  download zip file or clone contents of the neighborhood-map repository from GitHub
+  Download zip file or clone contents of the neighborhood-map repository from GitHub
 
 ## Running
 
