@@ -159,19 +159,6 @@ var ViewModel = function() {
     document.body.style.backgroundColor = "white";
   }
 
-  this.placeSearched = ko.observable();
-
-  filterLocations = ko.computed(function() {
-    self.placeList().forEach(function(location) {
-      if (self.placeSearched() != null) {
-        var match = location.name.toLowerCase().indexOf(self.placeSearched().toLowerCase()) != -1;
-        location.showPlace(match);
-        //console.log(match);
-        location.marker.setVisible(match);
-      };
-    });
-  });
-
   this.openWindow = function(location) {
     //console.log(location.name)
     var marker = markers.filter(m => m.name === location.name)[0];
@@ -400,6 +387,7 @@ function initMap() {
   };
 };
 
+// Start Foursquare API
 // Make ajax request to Foursquare's venue search API
 function populateInfoWindow(marker, infowindow) {
   infowindow.setContent('');
@@ -512,5 +500,3 @@ function showLocations() {
   };
   map.fitBounds(bounds);
 };
-
-// End Google Maps API
