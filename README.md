@@ -2,6 +2,7 @@
 
   Single page web app that show my cities favorite locations
   Incorporates the Google Maps API along with Foursquare's venue and photo API
+  On marker click, opens up an info-window that displays the address, photo of the location and link to the location's page on Foursquare
 
 ### What is needed
 
